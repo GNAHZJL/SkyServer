@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -76,12 +77,14 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      * 消息转换器
      * @param converters
      */
+
     protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         //创建消息转换器
-        MappingJackson2HttpMessageConverter Converter = new MappingJackson2HttpMessageConverter(converters);
+        MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
         //把json对象放入消息转换器
-        Converter.setObjectMapper(new JacksonObjectMapper());
+        mappingJackson2HttpMessageConverter.setObjectMapper(new JacksonObjectMapper());
         //将自己的消息转换器加入容器
-        converters.add(0,converters)
+        converters.add(0,mappingJackson2HttpMessageConverter);
+
     }
 }
